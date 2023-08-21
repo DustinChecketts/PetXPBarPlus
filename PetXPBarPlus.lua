@@ -29,14 +29,14 @@ f.bar.text:SetJustifyV("CENTER")
 -- Update Status Bar with Pet XP
 function updateBar()
     local currXP, nextXP = GetPetExperience()
-    print("Pet Xp: " .. string.format("%2.2f", (currXP / nextXP) * 100) .. "%")
+    -- print("Pet Xp: " .. string.format("%2.2f", (currXP / nextXP) * 100) .. "%") --debug
     f.bar:SetValue((currXP / nextXP) * 100)
 end
 
 -- Update Pet Level Text with pet level
 function updateText()
     local level = UnitLevel("pet")
-    print("Pet Level: " .. level)
+    -- print("Pet Level: " .. level) --debug
     f.bar.text:SetText(level)
 end
 
