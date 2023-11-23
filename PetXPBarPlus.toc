@@ -1,4 +1,4 @@
-## Interface: 11404
+## Interface: 11500
 ## Title: Pet XP Bar Plus
 ## Version: 1.0.0
 ## Author: StormtrooperTK421
