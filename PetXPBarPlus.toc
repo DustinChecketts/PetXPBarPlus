@@ -1,6 +1,6 @@
-## Interface: 11501
+## Interface: 11502
 ## Title: PetXPBarPlus
-## Version: 1.0.2
+## Version: 1.0.3
 ## Author: StormtrooperTK421
 ## Notes: Displays a Pet XP Bar and Level in the PetFrame
 ## DefaultState: enabled
