@@ -1,5 +1,5 @@
 # Pet XP Bar Plus
-A World of Warcraft: Classic and Classic Era addon that displays a mini XP bar and current level of a Hunter's active pet in the default PlayerFrame PetFrame.
+A World of Warcraft: Classic Era addon that displays a mini XP bar and current level of a Hunter's active pet in the default PlayerFrame PetFrame.
 
 You don't have to open your Pet tab any longer to check the level of your pet and how close they are to leveling. Pet XP Bar Plus is a simple addon that displays a mini XP bar for the Hunter's current pet, as well as the pet's level, near the PetFrame portrait in the default UI. When no pet is active, this frame is hidden. This addon is ideal for addon minimalists who prefer the iconic Classic user-interface with some handy, modern elements.
 
