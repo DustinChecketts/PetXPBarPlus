@@ -1,5 +1,3 @@
--- World of Warcraft: Classic Era (1.14.4) user-interface addon that displays Hunters' pet experience and level in the PetFrame.
-
 -- Frame
 local f = CreateFrame("Frame", nil, UIParent)
 f:SetSize(50, 10)
@@ -23,8 +21,6 @@ f.bar.border:SetAllPoints(f)
 -- Pet Level Text
 f.bar.text = f.bar:CreateFontString("PetXPBarText", "OVERLAY", "GameFontHighlight")
 f.bar.text:SetPoint("LEFT", PetFrame.portrait, "LEFT", -10, -12)
-f.bar.text:SetJustifyH("CENTER")
-f.bar.text:SetJustifyV("CENTER")
 
 -- Update Status Bar with Pet XP
 function updateBar()
