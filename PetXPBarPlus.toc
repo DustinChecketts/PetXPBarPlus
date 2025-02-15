@@ -1,8 +1,8 @@
-## Interface: 11504
+## Interface: 11506
 ## Title: PetXPBarPlus
-## Version: 1.0.6
+## Version: 1.0.7
 ## Author: StormtrooperTK421
-## Notes: Displays a Pet XP Bar and Level in the PetFrame
+## Notes: Displays a movable Pet XP Bar and Level frame
 ## DefaultState: enabled
 ## X-Curse-Project-ID: 904963
 
