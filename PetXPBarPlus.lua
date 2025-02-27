@@ -1,21 +1,33 @@
--- Chat command to toggle frame lock/unlock and display instructions
+-- Chat command to manage PetXPBarPlus
 SLASH_PXP1 = "/pxp"
 SlashCmdList["PXP"] = function(msg)
-    if PetXPBarPlusFrame.isLocked then
-        PetXPBarPlusFrame.isLocked = false
-        PetXPBarPlusFrame:EnableMouse(true)
-        print("PetXPBarPlus unlocked. Drag the frame to reposition it. Type /pxp to lock it again.")
-    else
+    if msg == "reset" then
+        PetXPBarPlusFrame:ClearAllPoints()
+        PetXPBarPlusFrame:SetPoint("TOPLEFT", PetFrame, "BOTTOMLEFT", -2, 12)
+        print("PetXPBarPlus has been reset to its default position")
+
+    elseif msg == "lock" then
         PetXPBarPlusFrame.isLocked = true
         PetXPBarPlusFrame:EnableMouse(false)
-        print("PetXPBarPlus locked. Type /pxp to unlock and move it.")
+        print("PetXPBarPlus frame is now LOCKED")
+
+    elseif msg == "unlock" then
+        PetXPBarPlusFrame.isLocked = false
+        PetXPBarPlusFrame:EnableMouse(true)
+        print("PetXPBarPlus is now UNLOCKED and you may drag to reposition")
+
+    else
+        print("PetXPBarPlus Commands:")
+        print("  /pxp lock     - Lock the XP bar in place")
+        print("  /pxp unlock - Unlock the XP bar for repositioning")
+        print("  /pxp reset   - Reset the XP bar to its default position")
     end
 end
 
--- Create a moveable main frame anchored to UIParent
+-- Create a moveable main frame anchored below the pet portrait
 local f = CreateFrame("Frame", "PetXPBarPlusFrame", UIParent)
 f:SetSize(50, 10)
-f:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
+f:SetPoint("TOPLEFT", PetFrame, "BOTTOMLEFT", -2, 12) -- Position below pet portrait
 f:SetMovable(true)
 f:EnableMouse(true)
 f:RegisterForDrag("LeftButton")
@@ -23,7 +35,7 @@ f:SetScript("OnDragStart", f.StartMoving)
 f:SetScript("OnDragStop", f.StopMovingOrSizing)
 f:Hide()  -- Hide by default
 
--- Start unlocked
+-- Ensure it starts unlocked for initial movement if needed
 f.isLocked = false
 
 -- Create the status bar for pet XP
