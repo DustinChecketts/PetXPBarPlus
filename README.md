@@ -7,9 +7,17 @@ You don't have to open your Pet tab any longer to check the level of your pet an
 
 - Visual mini pet XP (experience) bar
 - Displays the current level of your active pet
-- Moveable frame intended to be placed directly below the Pet portrait
+- Moveable frame with a default position directly below the Pet portrait
 - Matches the Blizzard native native UI
 - Scales properly with UI Scaling enabled
+- Help commands (see below)
+
+<h4>Help</h4>
+
+- /pxp - Help menu
+- /pxp lock - Lock the Pet XP bar in place
+- /pxp unlock - Unlock the Pet XP bar for repositioning
+- /pxp reset - Reset the Pet XP bar to its default position
 
 <h4>Acknowledgements</h4>
 
