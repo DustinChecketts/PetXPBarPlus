@@ -1,5 +1,5 @@
 # Pet XP Bar Plus
-A World of Warcraft: Classic addon that displays a mini XP bar and current level of a Hunter's active pet. This frame is moveable and can be locked/unlocked using the /pxp chat command.
+A World of Warcraft: Classic (Anniversary, Seasons, Hardcore, Era) addon that displays a mini XP bar and current level of a Hunter's active pet. This frame is moveable and can be locked/unlocked using the /pxp chat command.
 
 You don't have to open your Pet tab any longer to check the level of your pet and how close they are to leveling. Pet XP Bar Plus is a simple addon that displays a mini XP bar for the Hunter's current pet, as well as the pet's level. When no pet is active, this frame is hidden. This addon is ideal for addon minimalists who prefer the iconic Classic user-interface with some helpful, modern elements.
 
