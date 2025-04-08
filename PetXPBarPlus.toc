@@ -1,6 +1,6 @@
-## Interface: 11506
+## Interface: 11507
 ## Title: PetXPBarPlus
-## Version: 1.0.8
+## Version: 1.0.9
 ## Author: StormtrooperTK421
 ## Notes: Displays a movable Pet XP Bar and Level frame
 ## DefaultState: enabled
