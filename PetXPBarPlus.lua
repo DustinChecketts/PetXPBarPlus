@@ -66,42 +66,45 @@ f.bar.border:SetTexture("Interface\\Tooltips\\UI-StatusBar-Border")
 f.bar.border:SetAllPoints(f)
 
 -- Create pet level text and offset it from the XP bar
-f.bar.text = f.bar:CreateFontString("PetXPBarText", "OVERLAY", "GameFontHighlight")
+f.bar.text = f.bar:CreateFontString("PetXPBarText", "OVERLAY", "GameFontNormalSmall")
+f.bar.text:SetTextColor(1, 0.82, 0)  -- Standard gold/yellow
 f.bar.text:SetPoint("BOTTOM", f.bar, "TOP", -16, 0)
 
--- Function to update the XP bar value
-local function updateBar()
+-- Internal tracking values for polling
+local lastXP = 0
+local lastNextXP = 0
+local lastPetLevel = 0
+local xpTicker = nil
+
+-- Update XP and level text without visibility logic
+local function updatePetXP()
     if HasPetUI() then
         local currXP, nextXP = GetPetExperience()
+        local level = UnitLevel("pet")
+
         if currXP and nextXP and nextXP > 0 then
             f.bar:SetValue((currXP / nextXP) * 100)
         else
             f.bar:SetValue(0)
         end
-    else
-        f.bar:SetValue(0)
-    end
-end
 
--- Function to update the pet level text
-local function updateText()
-    if HasPetUI() then
-        local level = UnitLevel("pet")
         if level then
             f.bar.text:SetText(level)
         else
             f.bar.text:SetText("")
         end
     else
+        f.bar:SetValue(0)
         f.bar.text:SetText("")
     end
 end
 
--- Show/Hide the XP bar based on pet status
+-- Handle visibility logic and control polling
 function hunterPetActive()
     local hasUI, isHunterPet = HasPetUI()
     if not (hasUI and isHunterPet) then
         f:Hide()
+        if xpTicker then xpTicker:Cancel() xpTicker = nil end
         return
     end
 
@@ -110,22 +113,42 @@ function hunterPetActive()
     local maxLevel = GetMaxPlayerLevel()
 
     if playerLevel < maxLevel or petLevel < maxLevel then
-        updateBar()
-        updateText()
         f:Show()
+        updatePetXP()
+
+        -- Start polling if not already running
+        if not xpTicker then
+            xpTicker = C_Timer.NewTicker(1, function()
+                if not f:IsShown() then return end
+
+                local currXP, nextXP = GetPetExperience()
+                local level = UnitLevel("pet")
+
+                if currXP ~= lastXP or nextXP ~= lastNextXP or level ~= lastPetLevel then
+                    updatePetXP()
+                    lastXP = currXP
+                    lastNextXP = nextXP
+                    lastPetLevel = level
+                end
+            end)
+        end
     else
         f:Hide()
+        if xpTicker then xpTicker:Cancel() xpTicker = nil end
     end
 end
 
--- Event handling for pet experience and pet status updates
-local xpEventFrame = CreateFrame("Frame")
-xpEventFrame:RegisterEvent("UNIT_PET_EXPERIENCE")
-xpEventFrame:SetScript("OnEvent", hunterPetActive)
+-- Unified event handler
+local eventFrame = CreateFrame("Frame")
+eventFrame:RegisterEvent("UNIT_PET")
+eventFrame:RegisterEvent("PLAYER_LOGIN")
+eventFrame:RegisterEvent("PLAYER_ALIVE")
+eventFrame:RegisterEvent("UNIT_PET_EXPERIENCE")
 
-local petEventFrame = CreateFrame("Frame")
-petEventFrame:RegisterEvent("UNIT_PET")
-petEventFrame:SetScript("OnEvent", hunterPetActive)
-
--- Initialize pet status
-hunterPetActive()
+eventFrame:SetScript("OnEvent", function(_, event, unit)
+    if event == "UNIT_PET" or event == "PLAYER_LOGIN" or event == "PLAYER_ALIVE" then
+        hunterPetActive()
+    elseif event == "UNIT_PET_EXPERIENCE" and unit == "pet" then
+        updatePetXP()
+    end
+end)
