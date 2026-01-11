@@ -1,10 +1,11 @@
-## Interface: 11508
+## Interface: 20505, 11508
 ## Title: PetXPBarPlus
-## Version: 1.0.10
+## Version: 1.1.0
 ## Author: StormtrooperTK421
 ## Notes: Displays a movable Pet XP Bar and Level frame
 ## DefaultState: enabled
 ## X-Curse-Project-ID: 904963
 
 PetXPBarPlus.lua
+
 
