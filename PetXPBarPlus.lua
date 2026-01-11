@@ -2,8 +2,7 @@
 SLASH_PXP1 = "/pxp"
 SlashCmdList["PXP"] = function(msg)
     if msg == "reset" then
-        PetXPBarPlusFrame:ClearAllPoints()
-        PetXPBarPlusFrame:SetPoint("TOPLEFT", PetFrame, "BOTTOMLEFT", -2, 12)
+        AnchorToPetFrame()
         print("PetXPBarPlus has been reset to its default position")
 
     elseif msg == "lock" then
@@ -19,24 +18,38 @@ SlashCmdList["PXP"] = function(msg)
     else
         print("PetXPBarPlus Commands:")
         print("  /pxp lock     - Lock the XP bar in place")
-        print("  /pxp unlock - Unlock the XP bar for repositioning")
-        print("  /pxp reset   - Reset the XP bar to its default position")
+        print("  /pxp unlock   - Unlock the XP bar for repositioning")
+        print("  /pxp reset    - Reset the XP bar to its default position")
     end
 end
 
 -- Create a moveable main frame anchored below the pet portrait
 local f = CreateFrame("Frame", "PetXPBarPlusFrame", UIParent)
 f:SetSize(50, 10)
-f:SetPoint("TOPLEFT", PetFrame, "BOTTOMLEFT", -2, 12) -- Position below pet portrait
 f:SetMovable(true)
 f:EnableMouse(true)
 f:RegisterForDrag("LeftButton")
 f:SetScript("OnDragStart", f.StartMoving)
 f:SetScript("OnDragStop", f.StopMovingOrSizing)
+f:SetFrameStrata("HIGH")
+f:SetFrameLevel(10)
 f:Hide()  -- Hide by default
 
 -- Ensure it starts unlocked for initial movement if needed
 f.isLocked = false
+
+-- Function to safely anchor the frame to PetFrame (after UI loads)
+function AnchorToPetFrame()
+    if PetFrame then
+        PetXPBarPlusFrame:ClearAllPoints()
+        PetXPBarPlusFrame:SetPoint("TOPLEFT", PetFrame, "BOTTOMLEFT", -2, 12)
+    else
+        C_Timer.After(0.1, AnchorToPetFrame)
+    end
+end
+
+-- Call once on load
+AnchorToPetFrame()
 
 -- Create the status bar for pet XP
 f.bar = CreateFrame("StatusBar", nil, f)
@@ -87,7 +100,16 @@ end
 -- Show/Hide the XP bar based on pet status
 function hunterPetActive()
     local hasUI, isHunterPet = HasPetUI()
-    if hasUI and isHunterPet then
+    if not (hasUI and isHunterPet) then
+        f:Hide()
+        return
+    end
+
+    local playerLevel = UnitLevel("player")
+    local petLevel = UnitLevel("pet")
+    local maxLevel = GetMaxPlayerLevel()
+
+    if playerLevel < maxLevel or petLevel < maxLevel then
         updateBar()
         updateText()
         f:Show()
