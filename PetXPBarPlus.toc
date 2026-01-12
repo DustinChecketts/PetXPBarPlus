@@ -3,10 +3,6 @@
 ## Version: 1.1.1
 ## Author: StormtrooperTK421
 ## Notes: Displays a movable Pet XP Bar and Level frame
-## DefaultState: enabled
 ## X-Curse-Project-ID: 904963
 
 PetXPBarPlus.lua
-
-
-
