@@ -31,18 +31,20 @@ f:EnableMouse(true)
 f:RegisterForDrag("LeftButton")
 f:SetScript("OnDragStart", f.StartMoving)
 f:SetScript("OnDragStop", f.StopMovingOrSizing)
-f:SetFrameStrata("HIGH")
-f:SetFrameLevel(10)
-f:Hide()  -- Hide by default
+f:Hide() -- Hide by default
 
 -- Ensure it starts unlocked for initial movement if needed
 f.isLocked = false
 
--- Function to safely anchor the frame to PetFrame (after UI loads)
+-- Function to safely anchor the frame to PetFrame and match its draw layer
 function AnchorToPetFrame()
     if PetFrame then
         PetXPBarPlusFrame:ClearAllPoints()
         PetXPBarPlusFrame:SetPoint("TOPLEFT", PetFrame, "BOTTOMLEFT", -2, 12)
+
+        -- Match the pet frame strata so we stay above it, but not above major UI like the world map
+        PetXPBarPlusFrame:SetFrameStrata(PetFrame:GetFrameStrata() or "MEDIUM")
+        PetXPBarPlusFrame:SetFrameLevel((PetFrame:GetFrameLevel() or 1) + 2)
     else
         C_Timer.After(0.1, AnchorToPetFrame)
     end
@@ -67,7 +69,7 @@ f.bar.border:SetAllPoints(f)
 
 -- Create pet level text and offset it from the XP bar
 f.bar.text = f.bar:CreateFontString("PetXPBarText", "OVERLAY", "GameFontNormalSmall")
-f.bar.text:SetTextColor(1, 0.82, 0)  -- Standard gold/yellow
+f.bar.text:SetTextColor(1, 0.82, 0)
 f.bar.text:SetPoint("BOTTOM", f.bar, "TOP", -16, 0)
 
 -- Internal tracking values for polling
@@ -104,7 +106,10 @@ function hunterPetActive()
     local hasUI, isHunterPet = HasPetUI()
     if not (hasUI and isHunterPet) then
         f:Hide()
-        if xpTicker then xpTicker:Cancel() xpTicker = nil end
+        if xpTicker then
+            xpTicker:Cancel()
+            xpTicker = nil
+        end
         return
     end
 
@@ -119,7 +124,9 @@ function hunterPetActive()
         -- Start polling if not already running
         if not xpTicker then
             xpTicker = C_Timer.NewTicker(1, function()
-                if not f:IsShown() then return end
+                if not f:IsShown() then
+                    return
+                end
 
                 local currXP, nextXP = GetPetExperience()
                 local level = UnitLevel("pet")
@@ -134,7 +141,10 @@ function hunterPetActive()
         end
     else
         f:Hide()
-        if xpTicker then xpTicker:Cancel() xpTicker = nil end
+        if xpTicker then
+            xpTicker:Cancel()
+            xpTicker = nil
+        end
     end
 end
 
@@ -148,6 +158,7 @@ eventFrame:RegisterEvent("UNIT_PET_EXPERIENCE")
 eventFrame:SetScript("OnEvent", function(_, event, unit)
     if event == "UNIT_PET" or event == "PLAYER_LOGIN" or event == "PLAYER_ALIVE" then
         hunterPetActive()
+        AnchorToPetFrame()
     elseif event == "UNIT_PET_EXPERIENCE" and unit == "pet" then
         updatePetXP()
     end
