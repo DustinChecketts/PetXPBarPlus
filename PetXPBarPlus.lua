@@ -124,7 +124,7 @@ local function AnchorToPetFrame()
 
     SyncToPetFrameLayer()
     f:ClearAllPoints()
-    f:SetPoint("TOPLEFT", petFrame, "BOTTOMLEFT", -2, 12)
+    f:SetPoint("TOPLEFT", petFrame, "BOTTOMLEFT", 0, 12)
 
     -- Keep the level badge independent of the tiny XP container. Anchor it
     -- directly to Blizzard's PetFrame so it cannot be clipped or lost when
@@ -133,7 +133,7 @@ local function AnchorToPetFrame()
     f.levelBadge:SetFrameStrata(petFrame:GetFrameStrata() or "MEDIUM")
     f.levelBadge:SetFrameLevel((petFrame:GetFrameLevel() or 1) + 8)
     f.levelBadge:ClearAllPoints()
-    f.levelBadge:SetPoint("BOTTOMLEFT", petFrame, "BOTTOMLEFT", -13, 2)
+    f.levelBadge:SetPoint("BOTTOM", f.bar, "TOPLEFT", 0, -1)
     return true
 end
 
