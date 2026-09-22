@@ -174,24 +174,27 @@ f.levelBadge:SetFrameLevel(f:GetFrameLevel() + 8)
 -- Build the pet badge from simple native primitives instead of reusing
 -- UI-TargetingFrame-LevelBackground. That atlas is not a standalone circle
 -- in Forever and rendered as the square/gradient artifact seen in testing.
-f.levelBadge.outer = f.levelBadge:CreateTexture(nil, "BACKGROUND")
-f.levelBadge.outer:SetPoint("CENTER")
-f.levelBadge.outer:SetSize(23, 23)
-f.levelBadge.outer:SetTexture("Interface\\COMMON\\Indicator-Gray")
-f.levelBadge.outer:SetVertexColor(0.64, 0.39, 0.16, 1)
-
-f.levelBadge.inner = f.levelBadge:CreateTexture(nil, "BORDER")
+-- Use Blizzard's actual unit-frame level-border artwork rather than trying
+-- to simulate the bronze ring with two tinted circles.
+f.levelBadge.inner = f.levelBadge:CreateTexture(nil, "BACKGROUND")
 f.levelBadge.inner:SetPoint("CENTER")
 f.levelBadge.inner:SetSize(21, 21)
 f.levelBadge.inner:SetTexture("Interface\\COMMON\\Indicator-Gray")
-f.levelBadge.inner:SetVertexColor(0.06, 0.06, 0.06, 1)
+f.levelBadge.inner:SetVertexColor(0.035, 0.035, 0.035, 1)
+
+f.levelBadge.border = f.levelBadge:CreateTexture(nil, "BORDER")
+f.levelBadge.border:SetPoint("CENTER")
+f.levelBadge.border:SetSize(27, 27)
+f.levelBadge.border:SetTexture("Interface\\TargetingFrame\\UI-TargetingFrame")
+-- Crop the circular level medallion/ring from Blizzard's targeting-frame sheet.
+f.levelBadge.border:SetTexCoord(0.41015625, 0.52734375, 0.74609375, 0.98046875)
 
 f.levelBadge.text = f.levelBadge:CreateFontString("PetXPBarText", "OVERLAY", "GameFontNormalSmall")
 f.levelBadge.text:SetPoint("CENTER", 0, 0)
 f.levelBadge.text:SetTextColor(1, 1, 1)
 local badgeFont, _, badgeFlags = f.levelBadge.text:GetFont()
 if badgeFont then
-    f.levelBadge.text:SetFont(badgeFont, 7, badgeFlags)
+    f.levelBadge.text:SetFont(badgeFont, 8, badgeFlags)
 end
 
 local function UpdatePetXP()
