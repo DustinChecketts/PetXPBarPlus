@@ -6,3 +6,4 @@
 ## X-Curse-Project-ID: 904963\n## SavedVariables: PetXPBarPlusDB
 
 PetXPBarPlus.lua
+Options.lua
