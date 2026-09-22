@@ -167,7 +167,7 @@ f.bar.border:SetAllPoints(f.bar)
 -- Pet level badge. The circular targeting-frame texture gives us a Blizzard-native
 -- bronze/gold ring that visually pairs with Forever's character level badge.
 f.levelBadge = CreateFrame("Frame", nil, f)
-f.levelBadge:SetSize(28, 28)
+f.levelBadge:SetSize(26, 26)
 -- Match the Anniversary/TBC placement: level sits just above the XP bar\nf.levelBadge:SetPoint("BOTTOM", f.bar, "TOP", -16, -1)
 f.levelBadge:SetFrameLevel(f:GetFrameLevel() + 8)
 
@@ -176,19 +176,23 @@ f.levelBadge:SetFrameLevel(f:GetFrameLevel() + 8)
 -- in Forever and rendered as the square/gradient artifact seen in testing.
 f.levelBadge.outer = f.levelBadge:CreateTexture(nil, "BACKGROUND")
 f.levelBadge.outer:SetPoint("CENTER")
-f.levelBadge.outer:SetSize(28, 28)
+f.levelBadge.outer:SetSize(26, 26)
 f.levelBadge.outer:SetTexture("Interface\\COMMON\\Indicator-Gray")
-f.levelBadge.outer:SetVertexColor(0.72, 0.43, 0.16, 1)
+f.levelBadge.outer:SetVertexColor(0.78, 0.47, 0.18, 1)
 
 f.levelBadge.inner = f.levelBadge:CreateTexture(nil, "BORDER")
 f.levelBadge.inner:SetPoint("CENTER")
-f.levelBadge.inner:SetSize(20, 20)
+f.levelBadge.inner:SetSize(19, 19)
 f.levelBadge.inner:SetTexture("Interface\\COMMON\\Indicator-Gray")
 f.levelBadge.inner:SetVertexColor(0.06, 0.06, 0.06, 1)
 
 f.levelBadge.text = f.levelBadge:CreateFontString("PetXPBarText", "OVERLAY", "GameFontNormalSmall")
 f.levelBadge.text:SetPoint("CENTER", 0, 0)
 f.levelBadge.text:SetTextColor(1, 1, 1)
+local badgeFont, _, badgeFlags = f.levelBadge.text:GetFont()
+if badgeFont then
+    f.levelBadge.text:SetFont(badgeFont, 9, badgeFlags)
+end
 
 local function UpdatePetXP()
     local hasUI, isHunterPet = GetHunterPetState()
