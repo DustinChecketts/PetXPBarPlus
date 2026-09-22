@@ -1,6 +1,6 @@
 local ADDON_NAME = ...
 PetXPBarPlus = PetXPBarPlus or {}
-local Addon = PetXPBarPlus
+local Addon = PetXPBarPlus\nlocal Compat = Addon.Compat
 
 local DEFAULTS = {
     showXPBar = true,
@@ -59,14 +59,8 @@ end
 MakeCheckbox("Show XP Bar", "showXPBar", -58)
 MakeCheckbox("Show Pet Level", "showPetLevel", -88)
 
-local category
-if Settings and Settings.RegisterCanvasLayoutCategory and Settings.RegisterAddOnCategory then
-    category = Settings.RegisterCanvasLayoutCategory(panel, panel.name)
-    Settings.RegisterAddOnCategory(category)
-end
+local category = Compat.RegisterOptionsPanel(panel)
 
 function Addon.OpenOptions()
-    if category and Settings and Settings.OpenToCategory then
-        Settings.OpenToCategory(category:GetID())
-    end
+    Compat.OpenOptionsPanel(panel, category)
 end
