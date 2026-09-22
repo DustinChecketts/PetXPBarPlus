@@ -1,8 +1,8 @@
 ## Interface: 16001
 ## Title: PetXPBarPlus
-## Version: 1.2.0-forever-beta.1
+## Version: 1.2.0-forever-beta.2
 ## Author: StormtrooperTK421
 ## Notes: Displays a movable Pet XP Bar and Level frame
-## X-Curse-Project-ID: 904963
+## X-Curse-Project-ID: 904963\n## SavedVariables: PetXPBarPlusDB
 
 PetXPBarPlus.lua
