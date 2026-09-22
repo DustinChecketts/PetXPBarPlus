@@ -243,8 +243,27 @@ end
 local function ApplyDisplayOptions()
     local db = Addon.db
     if not db then return end
-    if db.showXPBar then f.bar:Show() else f.bar:Hide() end
-    if db.showPetLevel then f.levelBadge:Show() else f.levelBadge:Hide() end
+
+    local playerLevel = GetUnitLevel("player")
+    local petLevel = GetUnitLevel("pet")
+    local maxLevel = Compat.GetLevelCap()
+
+    -- A hunter pet cannot earn XP while it is caught up to its hunter.
+    -- At the client level cap, neither the XP bar nor pet-level label is useful.
+    local petAtHunterLevel = playerLevel and petLevel and petLevel >= playerLevel
+    local petAtLevelCap = petLevel and maxLevel and petLevel >= maxLevel
+
+    if db.showXPBar and not petAtHunterLevel and not petAtLevelCap then
+        f.bar:Show()
+    else
+        f.bar:Hide()
+    end
+
+    if db.showPetLevel and not petAtLevelCap then
+        f.levelBadge:Show()
+    else
+        f.levelBadge:Hide()
+    end
 end
 Addon.ApplyDisplayOptions = ApplyDisplayOptions
 
