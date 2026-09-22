@@ -158,13 +158,24 @@ f.bar.border:SetAllPoints(f.bar)
 -- Pet level badge. The circular targeting-frame texture gives us a Blizzard-native
 -- bronze/gold ring that visually pairs with Forever's character level badge.
 f.levelBadge = CreateFrame("Frame", nil, f)
-f.levelBadge:SetSize(24, 24)
-f.levelBadge:SetPoint("RIGHT", f.bar, "LEFT", 1, 0)
+f.levelBadge:SetSize(28, 28)
+f.levelBadge:SetPoint("RIGHT", f.bar, "LEFT", 0, 0)
 f.levelBadge:SetFrameLevel(f:GetFrameLevel() + 8)
 
-f.levelBadge.background = f.levelBadge:CreateTexture(nil, "BACKGROUND")
-f.levelBadge.background:SetAllPoints()
-f.levelBadge.background:SetTexture("Interface\\TargetingFrame\\UI-TargetingFrame-LevelBackground")
+-- Build the pet badge from simple native primitives instead of reusing
+-- UI-TargetingFrame-LevelBackground. That atlas is not a standalone circle
+-- in Forever and rendered as the square/gradient artifact seen in testing.
+f.levelBadge.outer = f.levelBadge:CreateTexture(nil, "BACKGROUND")
+f.levelBadge.outer:SetPoint("CENTER")
+f.levelBadge.outer:SetSize(28, 28)
+f.levelBadge.outer:SetTexture("Interface\\COMMON\\Indicator-Gray")
+f.levelBadge.outer:SetVertexColor(0.52, 0.31, 0.12, 1)
+
+f.levelBadge.inner = f.levelBadge:CreateTexture(nil, "BORDER")
+f.levelBadge.inner:SetPoint("CENTER")
+f.levelBadge.inner:SetSize(22, 22)
+f.levelBadge.inner:SetTexture("Interface\\COMMON\\Indicator-Gray")
+f.levelBadge.inner:SetVertexColor(0.06, 0.06, 0.06, 1)
 
 f.levelBadge.text = f.levelBadge:CreateFontString("PetXPBarText", "OVERLAY", "GameFontNormalSmall")
 f.levelBadge.text:SetPoint("CENTER", 0, 0)
