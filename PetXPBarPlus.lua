@@ -133,7 +133,7 @@ local function AnchorToPetFrame()
     f.levelBadge:SetFrameStrata(petFrame:GetFrameStrata() or "MEDIUM")
     f.levelBadge:SetFrameLevel((petFrame:GetFrameLevel() or 1) + 8)
     f.levelBadge:ClearAllPoints()
-    f.levelBadge:SetPoint("BOTTOMLEFT", petFrame, "BOTTOMLEFT", -18, 2)
+    f.levelBadge:SetPoint("BOTTOMLEFT", petFrame, "BOTTOMLEFT", -13, 2)
     return true
 end
 
