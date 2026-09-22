@@ -253,13 +253,16 @@ local function ApplyDisplayOptions()
     local petAtHunterLevel = playerLevel and petLevel and petLevel >= playerLevel
     local petAtLevelCap = petLevel and maxLevel and petLevel >= maxLevel
 
-    if db.showXPBar and not petAtHunterLevel and not petAtLevelCap then
+    local xpBarEligible = db.alwaysShowXPBar or (not petAtHunterLevel and not petAtLevelCap)
+    local petLevelEligible = db.alwaysShowPetLevel or not petAtLevelCap
+
+    if db.showXPBar and xpBarEligible then
         f.bar:Show()
     else
         f.bar:Hide()
     end
 
-    if db.showPetLevel and not petAtLevelCap then
+    if db.showPetLevel and petLevelEligible then
         f.levelBadge:Show()
     else
         f.levelBadge:Hide()
@@ -287,7 +290,7 @@ local function HunterPetActive()
         shouldShow = playerLevel < maxLevel or petLevel < maxLevel
     end
 
-    if not shouldShow then
+    if not shouldShow and not (Addon.db and (Addon.db.alwaysShowXPBar or Addon.db.alwaysShowPetLevel)) then
         f:Hide()
         f.levelBadge:Hide()
         StopXPTicker()
