@@ -133,7 +133,7 @@ local function AnchorToPetFrame()
     f.levelBadge:SetFrameStrata(petFrame:GetFrameStrata() or "MEDIUM")
     f.levelBadge:SetFrameLevel((petFrame:GetFrameLevel() or 1) + 8)
     f.levelBadge:ClearAllPoints()
-    f.levelBadge:SetPoint("BOTTOMLEFT", petFrame, "BOTTOMLEFT", -2, 5)
+    f.levelBadge:SetPoint("BOTTOMLEFT", petFrame, "BOTTOMLEFT", -18, 2)
     return true
 end
 
@@ -178,11 +178,11 @@ f.levelBadge.outer = f.levelBadge:CreateTexture(nil, "BACKGROUND")
 f.levelBadge.outer:SetPoint("CENTER")
 f.levelBadge.outer:SetSize(28, 28)
 f.levelBadge.outer:SetTexture("Interface\\COMMON\\Indicator-Gray")
-f.levelBadge.outer:SetVertexColor(0.52, 0.31, 0.12, 1)
+f.levelBadge.outer:SetVertexColor(0.72, 0.43, 0.16, 1)
 
 f.levelBadge.inner = f.levelBadge:CreateTexture(nil, "BORDER")
 f.levelBadge.inner:SetPoint("CENTER")
-f.levelBadge.inner:SetSize(22, 22)
+f.levelBadge.inner:SetSize(20, 20)
 f.levelBadge.inner:SetTexture("Interface\\COMMON\\Indicator-Gray")
 f.levelBadge.inner:SetVertexColor(0.06, 0.06, 0.06, 1)
 
