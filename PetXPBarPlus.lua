@@ -159,7 +159,7 @@ f.bar.border:SetAllPoints(f.bar)
 -- bronze/gold ring that visually pairs with Forever's character level badge.
 f.levelBadge = CreateFrame("Frame", nil, f)
 f.levelBadge:SetSize(28, 28)
-f.levelBadge:SetPoint("RIGHT", f.bar, "LEFT", 0, 0)
+-- Match the Anniversary/TBC placement: level sits just above the XP bar\nf.levelBadge:SetPoint("BOTTOM", f.bar, "TOP", -16, -1)
 f.levelBadge:SetFrameLevel(f:GetFrameLevel() + 8)
 
 -- Build the pet badge from simple native primitives instead of reusing
