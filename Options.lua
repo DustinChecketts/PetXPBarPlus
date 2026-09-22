@@ -6,6 +6,8 @@ local Compat = Addon.Compat
 local DEFAULTS = {
     showXPBar = true,
     showPetLevel = true,
+    alwaysShowXPBar = false,
+    alwaysShowPetLevel = false,
 }
 Addon.DEFAULTS = DEFAULTS
 
@@ -79,9 +81,22 @@ end
 MakeCheckbox("Show XP Bar", "showXPBar", -58)
 MakeCheckbox("Show Pet Level", "showPetLevel", -88)
 
+local behaviorTitle = panel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+behaviorTitle:SetPoint("TOPLEFT", 16, -126)
+behaviorTitle:SetText("Visibility Behavior")
+
+MakeCheckbox("Always show XP Bar", "alwaysShowXPBar", -150)
+MakeCheckbox("Always show Pet Level", "alwaysShowPetLevel", -180)
+
+local behaviorNote = panel:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
+behaviorNote:SetPoint("TOPLEFT", 42, -208)
+behaviorNote:SetWidth(430)
+behaviorNote:SetJustifyH("LEFT")
+behaviorNote:SetText("By default, the XP bar hides when your pet cannot gain XP, and the pet level hides at the level cap.")
+
 local defaultsButton = CreateFrame("Button", nil, panel, "UIPanelButtonTemplate")
 defaultsButton:SetSize(96, 22)
-defaultsButton:SetPoint("TOPLEFT", 16, -124)
+defaultsButton:SetPoint("TOPLEFT", 16, -250)
 defaultsButton:SetText("Defaults")
 defaultsButton:SetScript("OnClick", ResetDefaults)
 
