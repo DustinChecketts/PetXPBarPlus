@@ -1,7 +1,8 @@
 local ADDON_NAME = ...
 PetXPBarPlus = PetXPBarPlus or {}
 local Addon = PetXPBarPlus
-local PREFIX = "|cff1980ffPetXPBarPlus|r"\nlocal Compat = Addon.Compat
+local PREFIX = "|cff1980ffPetXPBarPlus|r"
+local Compat = Addon.Compat
 
 local function Print(message)
     print(PREFIX .. ": " .. message)
@@ -301,7 +302,8 @@ local function PrintDiagnostics()
     print("  GetPetExperience API: " .. tostring(type(GetPetExperience) == "function"))
     print("  Pet XP: " .. tostring(currentXP) .. " / " .. tostring(nextXP))
     print("  Pet level: " .. tostring(GetUnitLevel("pet")))
-    print("  Level cap: " .. tostring(Compat.GetLevelCap()))\n    print("  Forever client: " .. tostring(Compat.isForever))
+    print("  Level cap: " .. tostring(Compat.GetLevelCap()))
+    print("  Forever client: " .. tostring(Compat.isForever))
 end
 
 SLASH_PXP1 = "/pxp"
