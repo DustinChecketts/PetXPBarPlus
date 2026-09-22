@@ -1,6 +1,7 @@
 local ADDON_NAME = ...
 PetXPBarPlus = PetXPBarPlus or {}
-local Addon = PetXPBarPlus\nlocal Compat = Addon.Compat
+local Addon = PetXPBarPlus
+local Compat = Addon.Compat
 
 local DEFAULTS = {
     showXPBar = true,
