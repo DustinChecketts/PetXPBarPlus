@@ -1,5 +1,12 @@
 local ADDON_NAME = ...
-local PREFIX = "|cff1980ffPetXPBarPlus|r"\n\nlocal DEFAULTS = {\n    showXPBar = true,\n    showPetLevel = true,\n}\n\nlocal db
+local PREFIX = "|cff1980ffPetXPBarPlus|r"
+
+local DEFAULTS = {
+    showXPBar = true,
+    showPetLevel = true,
+}
+
+local db
 
 local function Print(message)
     print(PREFIX .. ": " .. message)
