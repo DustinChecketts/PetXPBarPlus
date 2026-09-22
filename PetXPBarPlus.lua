@@ -1,12 +1,7 @@
 local ADDON_NAME = ...
+PetXPBarPlus = PetXPBarPlus or {}
+local Addon = PetXPBarPlus
 local PREFIX = "|cff1980ffPetXPBarPlus|r"
-
-local DEFAULTS = {
-    showXPBar = true,
-    showPetLevel = true,
-}
-
-local db
 
 local function Print(message)
     print(PREFIX .. ": " .. message)
@@ -71,17 +66,6 @@ local function GetLevelCap()
     end
 
     return nil
-end
-
-local function InitializeDB()
-    PetXPBarPlusDB = type(PetXPBarPlusDB) == "table" and PetXPBarPlusDB or {}
-    db = PetXPBarPlusDB
-
-    for key, value in pairs(DEFAULTS) do
-        if db[key] == nil then
-            db[key] = value
-        end
-    end
 end
 
 local f = CreateFrame("Frame", "PetXPBarPlusFrame", UIParent)
@@ -186,24 +170,6 @@ f.levelBadge.text = f.levelBadge:CreateFontString("PetXPBarText", "OVERLAY", "Ga
 f.levelBadge.text:SetPoint("CENTER", 0, 0)
 f.levelBadge.text:SetTextColor(1, 0.82, 0)
 
-local function ApplyDisplayOptions()
-    if not db then
-        return
-    end
-
-    if db.showXPBar then
-        f.bar:Show()
-    else
-        f.bar:Hide()
-    end
-
-    if db.showPetLevel then
-        f.levelBadge:Show()
-    else
-        f.levelBadge:Hide()
-    end
-end
-
 local function UpdatePetXP()
     local hasUI, isHunterPet = GetHunterPetState()
     if not (hasUI and isHunterPet) then
@@ -230,6 +196,14 @@ local function StopXPTicker()
         xpTicker = nil
     end
 end
+
+local function ApplyDisplayOptions()
+    local db = Addon.db
+    if not db then return end
+    if db.showXPBar then f.bar:Show() else f.bar:Hide() end
+    if db.showPetLevel then f.levelBadge:Show() else f.levelBadge:Hide() end
+end
+Addon.ApplyDisplayOptions = ApplyDisplayOptions
 
 local function HunterPetActive()
     local hasUI, isHunterPet = GetHunterPetState()
@@ -281,59 +255,6 @@ local function HunterPetActive()
     end
 end
 
-local function CreateOptionsPanel()
-    local panel = CreateFrame("Frame", "PetXPBarPlusOptionsPanel")
-    panel.name = "PetXPBarPlus"
-
-    local title = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
-    title:SetPoint("TOPLEFT", 16, -16)
-    title:SetText("PetXPBarPlus")
-
-    local subtitle = panel:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
-    subtitle:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -8)
-    subtitle:SetText("WoW Forever pet experience display options.")
-
-    local function MakeCheckbox(label, key, y)
-        local check = CreateFrame("CheckButton", nil, panel, "InterfaceOptionsCheckButtonTemplate")
-        check:SetPoint("TOPLEFT", 16, y)
-
-        local textRegion = check.Text or check.text
-        if textRegion then
-            textRegion:SetText(label)
-        end
-
-        check:SetScript("OnShow", function(self)
-            self:SetChecked(db and db[key])
-        end)
-        check:SetScript("OnClick", function(self)
-            db[key] = self:GetChecked() and true or false
-            ApplyDisplayOptions()
-        end)
-        return check
-    end
-
-    MakeCheckbox("Show XP Bar", "showXPBar", -58)
-    MakeCheckbox("Show Pet Level", "showPetLevel", -88)
-
-    panel:SetScript("OnShow", function()
-        ApplyDisplayOptions()
-    end)
-
-    -- Forever currently exposes the modern Settings system, but keep the
-    -- legacy registration path available for compatibility with other clients.
-    if Settings and Settings.RegisterCanvasLayoutCategory and Settings.RegisterAddOnCategory then
-        local category = Settings.RegisterCanvasLayoutCategory(panel, panel.name)
-        Settings.RegisterAddOnCategory(category)
-        panel.categoryID = category:GetID()
-    elseif InterfaceOptions_AddCategory then
-        InterfaceOptions_AddCategory(panel)
-    end
-
-    return panel
-end
-
-local optionsPanel
-
 local function PrintDiagnostics()
     local version, build, buildDate, interfaceVersion = GetBuildInfo()
     local hasUI, isHunterPet = GetHunterPetState()
@@ -368,11 +289,8 @@ SlashCmdList.PXP = function(msg)
         f:EnableMouse(true)
         Print("is now UNLOCKED and may be dragged to reposition")
     elseif msg == "options" or msg == "config" then
-        if optionsPanel and Settings and Settings.OpenToCategory and optionsPanel.categoryID then
-            Settings.OpenToCategory(optionsPanel.categoryID)
-        elseif optionsPanel and InterfaceOptionsFrame_OpenToCategory then
-            InterfaceOptionsFrame_OpenToCategory(optionsPanel)
-            InterfaceOptionsFrame_OpenToCategory(optionsPanel)
+        if PetXPBarPlus and PetXPBarPlus.OpenOptions then
+            PetXPBarPlus.OpenOptions()
         else
             Print("open Options > AddOns > PetXPBarPlus")
         end
@@ -396,13 +314,6 @@ eventFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
 eventFrame:RegisterEvent("UNIT_PET_EXPERIENCE")
 
 eventFrame:SetScript("OnEvent", function(_, event, unit)
-    if event == "PLAYER_LOGIN" then
-        InitializeDB()
-        if not optionsPanel then
-            optionsPanel = CreateOptionsPanel()
-        end
-    end
-
     if event == "UNIT_PET" or event == "PLAYER_LOGIN" or event == "PLAYER_ALIVE" or event == "PLAYER_ENTERING_WORLD" then
         AnchorToPetFrame()
         HunterPetActive()
