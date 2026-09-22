@@ -107,7 +107,12 @@ local function AnchorToPetFrame()
 
     SyncToPetFrameLayer()
     f:ClearAllPoints()
-    f:SetPoint("TOPLEFT", petFrame, "BOTTOMLEFT", 0, 12)
+    if Compat.isForever then
+        f:SetPoint("TOPLEFT", petFrame, "BOTTOMLEFT", 0, 12)
+    else
+        -- Preserve the established main-branch Classic placement.
+        f:SetPoint("TOPLEFT", petFrame, "BOTTOMLEFT", -2, 12)
+    end
 
     -- Keep the level badge independent of the tiny XP container. Anchor it
     -- directly to Blizzard's PetFrame so it cannot be clipped or lost when
@@ -160,8 +165,13 @@ end
 f.bar.border = f.bar:CreateTexture("PetXPBarBorder", "OVERLAY")
 f.bar.border:SetTexture("Interface\\Tooltips\\UI-StatusBar-Border")
 f.bar.border:ClearAllPoints()
-f.bar.border:SetPoint("TOPLEFT", f.bar, "TOPLEFT", -1, 1)
-f.bar.border:SetPoint("BOTTOMRIGHT", f.bar, "BOTTOMRIGHT", 1, -1)
+if Compat.isForever then
+    f.bar.border:SetPoint("TOPLEFT", f.bar, "TOPLEFT", -1, 1)
+    f.bar.border:SetPoint("BOTTOMRIGHT", f.bar, "BOTTOMRIGHT", 1, -1)
+else
+    -- Match the 1.1.5 Classic border geometry.
+    f.bar.border:SetAllPoints(f.bar)
+end
 
 
 -- Pet level display. Forever receives the compact medallion treatment;
