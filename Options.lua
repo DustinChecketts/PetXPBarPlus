@@ -7,6 +7,7 @@ local DEFAULTS = {
     showXPBar = true,
     showPetLevel = true,
 }
+Addon.DEFAULTS = DEFAULTS
 
 local function InitializeDB()
     PetXPBarPlusDB = type(PetXPBarPlusDB) == "table" and PetXPBarPlusDB or {}
@@ -19,11 +20,28 @@ local function InitializeDB()
     end
 end
 
+local controls = {}
+
 local function Apply()
     if Addon.ApplyDisplayOptions then
         Addon.ApplyDisplayOptions()
     end
 end
+
+local function RefreshControls()
+    for key, check in pairs(controls) do
+        check:SetChecked(Addon.db[key])
+    end
+end
+
+local function ResetDefaults()
+    for key, value in pairs(DEFAULTS) do
+        Addon.db[key] = value
+    end
+    RefreshControls()
+    Apply()
+end
+Addon.ResetDefaults = ResetDefaults
 
 InitializeDB()
 
@@ -47,6 +65,7 @@ local function MakeCheckbox(label, key, y)
         textRegion:SetText(label)
     end
 
+    controls[key] = check
     check:SetScript("OnShow", function(self)
         self:SetChecked(Addon.db[key])
     end)
@@ -59,6 +78,16 @@ end
 
 MakeCheckbox("Show XP Bar", "showXPBar", -58)
 MakeCheckbox("Show Pet Level", "showPetLevel", -88)
+
+local defaultsButton = CreateFrame("Button", nil, panel, "UIPanelButtonTemplate")
+defaultsButton:SetSize(96, 22)
+defaultsButton:SetPoint("TOPLEFT", 16, -124)
+defaultsButton:SetText("Defaults")
+defaultsButton:SetScript("OnClick", ResetDefaults)
+
+panel:SetScript("OnShow", function()
+    RefreshControls()
+end)
 
 local category = Compat.RegisterOptionsPanel(panel)
 
