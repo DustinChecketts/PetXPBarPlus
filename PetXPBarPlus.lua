@@ -179,7 +179,7 @@ f.levelBadge.inner:SetVertexColor(0.06, 0.06, 0.06, 1)
 
 f.levelBadge.text = f.levelBadge:CreateFontString("PetXPBarText", "OVERLAY", "GameFontNormalSmall")
 f.levelBadge.text:SetPoint("CENTER", 0, 0)
-f.levelBadge.text:SetTextColor(1, 0.82, 0)
+f.levelBadge.text:SetTextColor(1, 1, 1)
 
 local function UpdatePetXP()
     local hasUI, isHunterPet = GetHunterPetState()
