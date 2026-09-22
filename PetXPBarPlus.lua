@@ -133,7 +133,7 @@ local function AnchorToPetFrame()
     f.levelBadge:SetFrameStrata(petFrame:GetFrameStrata() or "MEDIUM")
     f.levelBadge:SetFrameLevel((petFrame:GetFrameLevel() or 1) + 8)
     f.levelBadge:ClearAllPoints()
-    f.levelBadge:SetPoint("BOTTOM", f.bar, "TOPLEFT", 0, 0)
+    f.levelBadge:SetPoint("BOTTOM", f.bar, "TOPLEFT", 0, -6)
     return true
 end
 
@@ -167,16 +167,10 @@ f.bar:SetStatusBarColor(0.58, 0.24, 0.86)
 
 f.bar.border = f.bar:CreateTexture("PetXPBarBorder", "OVERLAY")
 f.bar.border:SetTexture("Interface\\Tooltips\\UI-StatusBar-Border")
-f.bar.border:SetAllPoints(f.bar)
+f.bar.border:ClearAllPoints()
+f.bar.border:SetPoint("TOPLEFT", f.bar, "TOPLEFT", -1, 1)
+f.bar.border:SetPoint("BOTTOMRIGHT", f.bar, "BOTTOMRIGHT", 1, -1)
 
--- The status texture itself has a square leading edge. Cover its outermost
--- pixels beneath the tooltip border so the purple fill stays visually inside
--- the framed bar instead of protruding through the left edge.
-f.bar.leftMask = f.bar:CreateTexture(nil, "ARTWORK")
-f.bar.leftMask:SetPoint("TOPLEFT", f.bar, "TOPLEFT", 1, -1)
-f.bar.leftMask:SetPoint("BOTTOMLEFT", f.bar, "BOTTOMLEFT", 1, 1)
-f.bar.leftMask:SetWidth(2)
-f.bar.leftMask:SetColorTexture(0.035, 0.035, 0.035, 1)
 
 -- Pet level badge. The circular targeting-frame texture gives us a Blizzard-native
 -- bronze/gold ring that visually pairs with Forever's character level badge.
