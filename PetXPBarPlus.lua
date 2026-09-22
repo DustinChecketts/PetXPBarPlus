@@ -1,7 +1,7 @@
 local ADDON_NAME = ...
 PetXPBarPlus = PetXPBarPlus or {}
 local Addon = PetXPBarPlus
-local PREFIX = "|cff1980ffPetXPBarPlus|r"
+local PREFIX = "|cff1980ffPetXPBarPlus|r"\nlocal Compat = Addon.Compat
 
 local function Print(message)
     print(PREFIX .. ": " .. message)
@@ -48,24 +48,6 @@ local function GetUnitLevel(unit)
     end
 
     return SafeNumber(level)
-end
-
-local function GetLevelCap()
-    if type(GetEffectivePlayerMaxLevel) == "function" then
-        local ok, level = pcall(GetEffectivePlayerMaxLevel)
-        if ok and SafeNumber(level) then
-            return level
-        end
-    end
-
-    if type(GetMaxPlayerLevel) == "function" then
-        local ok, level = pcall(GetMaxPlayerLevel)
-        if ok and SafeNumber(level) then
-            return level
-        end
-    end
-
-    return nil
 end
 
 local f = CreateFrame("Frame", "PetXPBarPlusFrame", UIParent)
@@ -133,7 +115,12 @@ local function AnchorToPetFrame()
     f.levelBadge:SetFrameStrata(petFrame:GetFrameStrata() or "MEDIUM")
     f.levelBadge:SetFrameLevel((petFrame:GetFrameLevel() or 1) + 8)
     f.levelBadge:ClearAllPoints()
-    f.levelBadge:SetPoint("BOTTOM", f.bar, "TOPLEFT", 0, -6)
+    if Compat.isForever then
+        f.levelBadge:SetPoint("BOTTOM", f.bar, "TOPLEFT", 0, -6)
+    else
+        -- Preserve the main-branch Classic Era/Anniversary placement.
+        f.levelBadge:SetPoint("BOTTOM", f.bar, "TOP", -16, 0)
+    end
     return true
 end
 
@@ -163,7 +150,11 @@ if statusTexture then
     statusTexture:SetVertTile(false)
 end
 -- Forever uses purple for the player's experience bar; mirror that visual language.
-f.bar:SetStatusBarColor(0.58, 0.24, 0.86)
+if Compat.isForever then
+    f.bar:SetStatusBarColor(0.58, 0.24, 0.86)
+else
+    f.bar:SetStatusBarColor(25 / 255, 125 / 255, 255 / 255)
+end
 
 f.bar.border = f.bar:CreateTexture("PetXPBarBorder", "OVERLAY")
 f.bar.border:SetTexture("Interface\\Tooltips\\UI-StatusBar-Border")
@@ -172,11 +163,10 @@ f.bar.border:SetPoint("TOPLEFT", f.bar, "TOPLEFT", -1, 1)
 f.bar.border:SetPoint("BOTTOMRIGHT", f.bar, "BOTTOMRIGHT", 1, -1)
 
 
--- Pet level badge. The circular targeting-frame texture gives us a Blizzard-native
--- bronze/gold ring that visually pairs with Forever's character level badge.
-f.levelBadge = CreateFrame("Frame", nil, f)
+-- Pet level display. Forever receives the compact medallion treatment;
+-- Classic Era/Anniversary retain the original text presentation.
+f.levelBadge = CreateFrame("Frame", "PetXPBarPlusLevelBadge", f)
 f.levelBadge:SetSize(23, 23)
--- Match the Anniversary/TBC placement: level sits just above the XP bar\nf.levelBadge:SetPoint("BOTTOM", f.bar, "TOP", -16, -1)
 f.levelBadge:SetFrameLevel(f:GetFrameLevel() + 8)
 
 -- Build the pet badge from simple native primitives instead of reusing
@@ -201,8 +191,15 @@ f.levelBadge.text = f.levelBadge:CreateFontString("PetXPBarText", "OVERLAY", "Ga
 f.levelBadge.text:SetPoint("CENTER", 0, 0)
 f.levelBadge.text:SetTextColor(1, 1, 1)
 local badgeFont, _, badgeFlags = f.levelBadge.text:GetFont()
-if badgeFont then
+if badgeFont and Compat.isForever then
     f.levelBadge.text:SetFont(badgeFont, 8, badgeFlags)
+end
+
+if not Compat.isForever then
+    f.levelBadge.inner:Hide()
+    f.levelBadge.border:Hide()
+    f.levelBadge:SetSize(1, 1)
+    f.levelBadge.text:SetTextColor(1, 0.82, 0)
 end
 
 local function UpdatePetXP()
@@ -251,7 +248,7 @@ local function HunterPetActive()
 
     local playerLevel = GetUnitLevel("player")
     local petLevel = GetUnitLevel("pet")
-    local maxLevel = GetLevelCap()
+    local maxLevel = Compat.GetLevelCap()
 
     -- If Forever withholds one of these values, prefer showing the frame
     -- rather than incorrectly hiding it.
@@ -304,7 +301,7 @@ local function PrintDiagnostics()
     print("  GetPetExperience API: " .. tostring(type(GetPetExperience) == "function"))
     print("  Pet XP: " .. tostring(currentXP) .. " / " .. tostring(nextXP))
     print("  Pet level: " .. tostring(GetUnitLevel("pet")))
-    print("  Level cap: " .. tostring(GetLevelCap()))
+    print("  Level cap: " .. tostring(Compat.GetLevelCap()))\n    print("  Forever client: " .. tostring(Compat.isForever))
 end
 
 SLASH_PXP1 = "/pxp"
