@@ -1,0 +1,6 @@
+package-as: PetXPBarPlus
+
+ignore:
+  - .github
+  - .gitignore
+  - ARCHITECTURE.md
