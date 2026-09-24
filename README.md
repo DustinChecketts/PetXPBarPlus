@@ -1,35 +1,30 @@
 # Pet XP Bar Plus
-A World of Warcraft addon for WoW Forever and Classic (Anniversary, Seasons, Hardcore, Era) that displays a mini XP bar and current level of a Hunter's active pet. This frame is moveable and can be locked/unlocked using the /pxp chat command.
 
-You don't have to open your Pet tab any longer to check the level of your pet and how close they are to leveling. Pet XP Bar Plus is a simple addon that displays a mini XP bar for the Hunter's current pet, as well as the pet's level. When no pet is active, this frame is hidden. By default, the XP bar hides whenever the active Hunter pet cannot gain XP, and the pet level hides at the client level cap. These visibility rules can be overridden in the addon options. This addon is ideal for addon minimalists who prefer the iconic Classic user-interface with some helpful, modern elements.
+Your Hunter has an XP bar. Why shouldn't your pet?
 
-<h4>Features</h4>
+A World of Warcraft Forever and Classic (Anniversary, Seasons, Hardcore, Era) addon that adds a compact XP bar and level display to your Hunter's pet frame, so you can track your pet's progress without constantly opening the Pet window.
 
-- Visual mini pet XP (experience) bar
-- Displays the current level of your active pet
-- Moveable frame with a default position directly below the Pet portrait
-- Matches the Blizzard native UI
-- Scales properly with UI Scaling enabled
-- Options pane for showing/hiding the XP bar and pet level
-- Automatic visibility behavior with optional Always Show overrides
-- Help commands (see below)
+Designed to feel like a natural extension of Blizzard's UI, it's lightweight, unobtrusive, and stays out of the way when the information is no longer useful.
 
-<h4>Help</h4>
+### **Features**
 
-- /pxp - Help menu
-- /pxp lock - Lock the Pet XP bar in place
-- /pxp unlock - Unlock the Pet XP bar for repositioning
-- /pxp reset - Reset the Pet XP bar to its default position
-- /pxp options - Open the addon options pane
-- /pxp debug - Print client/API diagnostics
+- Pet XP bar and current level at a glance
+- Automatically hides the XP bar when your pet can't gain XP
+- Automatically hides pet level at max level
+- Options to show, hide, or always display either element
+- Moveable and lockable
+- Native Blizzard-style appearance
+- Supports WoW Forever, Classic Anniversary (TBC), and Classic Era (Hardcore, SoD). Not tested with Classic (MoP).
 
-<h4>Acknowledgements</h4>
+### **Commands**
 
-- [PetXPBar](https://www.curseforge.com/wow/addons/petxpbar) by [weryis](https://legacy.curseforge.com/members/weryis/projects)
-- [PetXP](https://www.curseforge.com/wow/addons/petxp) by [waggz81](https://legacy.curseforge.com/members/waggz81/projects)
+/pxp options — Open settings
+/pxp lock — Lock the display
+/pxp unlock — Unlock for repositioning
+/pxp reset — Reset its position
 
-<h4>Known Issues / To-Do</h4>
+### **Acknowledgements**
 
-- Add slash commands to enable/disable the addon
+Inspired by [PetXPBar](https://www.curseforge.com/wow/addons/petxpbar) by [weryis](https://legacy.curseforge.com/members/weryis/projects) and [PetXP](https://www.curseforge.com/wow/addons/petxp) by [waggz81](https://legacy.curseforge.com/members/waggz81/projects)
 
-Updated, uploaded, and maintained (at least for now) by [StormtrooperTK421](https://discordapp.com/users/237746068844969994) on [GitHub](https://github.com/DustinChecketts/PetXPBarPlus). Please submit issues and I'll do my best to troubleshoot, replicate, and resolve issues as my limited abilities allow.
+PetXPBarPlus is maintained by [StormtrooperTK421](https://discordapp.com/users/237746068844969994) on [GitHub](https://github.com/DustinChecketts/PetXPBarPlus). Please submit issues and I'll do my best to troubleshoot, replicate, and resolve any issues as well as add recommended features.
