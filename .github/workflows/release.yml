@@ -1,0 +1,72 @@
+name: Package and release
+
+on:
+  # Normal release path: pushing a version tag runs the packager.
+  push:
+    tags:
+      - "v*"
+
+  # Browser-only release path: enter a version from the Actions page.
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version (example: 1.2.0)"
+        required: true
+        type: string
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    env:
+      # The repository secret keeps the CurseForge token out of source control.
+      CF_API_TOKEN: ${{ secrets.CF_API_KEY }}
+      # GitHub supplies this token automatically for creating the GitHub release.
+      GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - name: Check out release source
+        # Pinned to the reviewed actions/checkout v5 commit.
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          fetch-depth: 0
+
+      - name: Create release tag
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          TAG="v${VERSION#v}"
+
+          if ! [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Invalid version: $VERSION"
+            echo "Use a semantic version such as 1.2.0"
+            exit 1
+          fi
+
+          if git rev-parse "$TAG" >/dev/null 2>&1; then
+            echo "Tag $TAG already exists."
+            exit 1
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git tag "$TAG"
+          git push origin "$TAG"
+
+      - name: Check out release tag
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          TAG="v${VERSION#v}"
+          git checkout "$TAG"
+
+      - name: Package and publish
+        # BigWigs Packager v2.6.1 adds explicit WoW Forever (16xxx) support.
+        # Keep this pinned to the same reviewed commit used by VendorPricePlus.
+        uses: BigWigsMods/packager@e50a250f8705041e40f2fa1ddcb280a686d65aa0
