@@ -239,9 +239,7 @@ end
 customRadio:SetScript("OnClick", OpenColorPicker)
 customLabel:SetScript("OnMouseDown", OpenColorPicker)
 customLabel:EnableMouse(true)
-customSample:SetScript = nil
-
-local positionTitle = panel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+ local positionTitle = panel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
 positionTitle:SetPoint("TOPLEFT", 16, -404)
 positionTitle:SetText("Position")
 
