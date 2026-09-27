@@ -35,7 +35,6 @@ local function InitializeDB()
 end
 
 local controls = {}
-local colorSwatch
 local colorRadios = {}
 local customLabel
 
@@ -60,10 +59,6 @@ local function RefreshControls()
     for key, check in pairs(controls) do
         check:SetChecked(Addon.db[key])
     end
-    if colorSwatch and Addon.db.xpColor then
-        colorSwatch.texture:SetColorTexture(Addon.db.xpColor.r, Addon.db.xpColor.g, Addon.db.xpColor.b)
-    end
-
     local mode = Addon.db.xpColorMode
     if not mode then
         if SameColor(Addon.db.xpColor, PURPLE) then mode = "purple"
@@ -153,20 +148,6 @@ local function MakeButton(label, x, y, width, onClick)
     return button
 end
 
-local currentColorLabel = panel:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-currentColorLabel:SetPoint("TOPLEFT", 16, -268)
-currentColorLabel:SetText("Current Color")
-
-colorSwatch = CreateFrame("Frame", nil, panel)
-colorSwatch:SetSize(40, 22)
-colorSwatch:SetPoint("LEFT", currentColorLabel, "RIGHT", 10, 0)
-colorSwatch.texture = colorSwatch:CreateTexture(nil, "BACKGROUND")
-colorSwatch.texture:SetAllPoints()
-colorSwatch.border = colorSwatch:CreateTexture(nil, "BORDER")
-colorSwatch.border:SetPoint("TOPLEFT", -2, 2)
-colorSwatch.border:SetPoint("BOTTOMRIGHT", 2, -2)
-colorSwatch.border:SetColorTexture(0.35, 0.35, 0.35, 1)
-
 local function MakeColorRadio(key, label, color, y)
     local radio = CreateFrame("CheckButton", nil, panel, "UIRadioButtonTemplate")
     radio:SetPoint("TOPLEFT", 16, y)
@@ -187,11 +168,11 @@ local function MakeColorRadio(key, label, color, y)
     return radio, textRegion
 end
 
-MakeColorRadio("purple", "Purple (Forever)", PURPLE, -302)
-MakeColorRadio("blue", "Blue (Classic)", BLUE, -332)
+MakeColorRadio("purple", "Purple (Forever)", PURPLE, -268)
+MakeColorRadio("blue", "Blue (Classic)", BLUE, -298)
 
 local customRadio = CreateFrame("CheckButton", nil, panel, "UIRadioButtonTemplate")
-customRadio:SetPoint("TOPLEFT", 16, -362)
+customRadio:SetPoint("TOPLEFT", 16, -328)
 colorRadios.custom = customRadio
 
 local customSample = panel:CreateTexture(nil, "ARTWORK")
@@ -240,15 +221,15 @@ customRadio:SetScript("OnClick", OpenColorPicker)
 customLabel:SetScript("OnMouseDown", OpenColorPicker)
 customLabel:EnableMouse(true)
  local positionTitle = panel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-positionTitle:SetPoint("TOPLEFT", 16, -404)
+positionTitle:SetPoint("TOPLEFT", 16, -370)
 positionTitle:SetText("Position")
 
-MakeCheckbox("Lock Position", "locked", -426)
-MakeButton("Reset Position", 42, -458, 112, function()
+MakeCheckbox("Lock Position", "locked", -392)
+MakeButton("Reset Position", 42, -424, 112, function()
     if Addon.ResetPosition then Addon.ResetPosition() end
 end)
 
-local defaultsButton = MakeButton("Defaults", 16, -504, 96, ResetDefaults)
+local defaultsButton = MakeButton("Defaults", 16, -470, 96, ResetDefaults)
 
 panel:SetScript("OnShow", function()
     RefreshControls()
