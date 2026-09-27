@@ -125,12 +125,16 @@ local function MakeButton(label, x, y, width, onClick)
     return button
 end
 
-MakeButton("Purple", 16, -266, 76, function() SetColor(PURPLE) end)
-MakeButton("Blue", 98, -266, 76, function() SetColor(BLUE) end)
+MakeButton("Purple (Forever)", 16, -266, 112, function() SetColor(PURPLE) end)
+MakeButton("Blue (Classic)", 134, -266, 104, function() SetColor(BLUE) end)
+
+local currentColorLabel = panel:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+currentColorLabel:SetPoint("TOPLEFT", 16, -302)
+currentColorLabel:SetText("Current Color")
 
 colorSwatch = CreateFrame("Button", nil, panel)
-colorSwatch:SetSize(24, 20)
-colorSwatch:SetPoint("TOPLEFT", 184, -267)
+colorSwatch:SetSize(32, 22)
+colorSwatch:SetPoint("LEFT", currentColorLabel, "RIGHT", 10, 0)
 colorSwatch.texture = colorSwatch:CreateTexture(nil, "BACKGROUND")
 colorSwatch.texture:SetAllPoints()
 colorSwatch.border = colorSwatch:CreateTexture(nil, "BORDER")
@@ -141,6 +145,7 @@ colorSwatch.border:SetColorTexture(0.35, 0.35, 0.35, 1)
 local customLabel = panel:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
 customLabel:SetPoint("LEFT", colorSwatch, "RIGHT", 8, 0)
 customLabel:SetText("Custom...")
+
 
 local function OpenColorPicker()
     local old = CopyColor(Addon.db.xpColor)
@@ -177,15 +182,15 @@ customLabel:SetScript("OnMouseDown", OpenColorPicker)
 customLabel:EnableMouse(true)
 
 local positionTitle = panel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-positionTitle:SetPoint("TOPLEFT", 16, -310)
+positionTitle:SetPoint("TOPLEFT", 16, -344)
 positionTitle:SetText("Position")
 
-MakeCheckbox("Lock Position", "locked", -332)
-MakeButton("Reset Position", 42, -364, 112, function()
+MakeCheckbox("Lock Position", "locked", -366)
+MakeButton("Reset Position", 42, -398, 112, function()
     if Addon.ResetPosition then Addon.ResetPosition() end
 end)
 
-local defaultsButton = MakeButton("Defaults", 16, -410, 96, ResetDefaults)
+local defaultsButton = MakeButton("Defaults", 16, -444, 96, ResetDefaults)
 
 panel:SetScript("OnShow", function()
     RefreshControls()
