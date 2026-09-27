@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.3.0-rc.1
+- Add Purple and Blue XP bar color presets.
+- Add a native custom color picker with persistent XP bar color.
+- Add persistent Lock Position control to the options panel.
+- Add Reset Position to the options panel.
+- Persist dragged frame position across sessions.
+- Keep `/pxp lock`, `/pxp unlock`, and `/pxp reset` synchronized with the same saved settings.
+
+
 ## 1.2.0
 
 ### WoW Forever
