@@ -168,8 +168,8 @@ local function MakeColorRadio(key, label, color, y)
     return radio, textRegion
 end
 
-MakeColorRadio("purple", "Purple (Forever)", PURPLE, -268)
-MakeColorRadio("blue", "Blue (Classic)", BLUE, -298)
+MakeColorRadio("purple", "Forever", PURPLE, -268)
+MakeColorRadio("blue", "Classic", BLUE, -298)
 
 local customRadio = CreateFrame("CheckButton", nil, panel, "UIRadioButtonTemplate")
 customRadio:SetPoint("TOPLEFT", 16, -328)
