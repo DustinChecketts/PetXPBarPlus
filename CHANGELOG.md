@@ -1,13 +1,15 @@
 # Changelog
 
-## 1.3.0-rc.1
-- Add Purple and Blue XP bar color presets.
-- Add a native custom color picker with persistent XP bar color.
-- Add persistent Lock Position control to the options panel.
-- Add Reset Position to the options panel.
-- Persist dragged frame position across sessions.
-- Keep `/pxp lock`, `/pxp unlock`, and `/pxp reset` synchronized with the same saved settings.
+## 1.3.0
 
+### Appearance
+- Add Forever and Classic XP bar color presets.
+- Add a custom color picker with a persistent color swatch and hex value.
+
+### Position
+- Add Lock Position and Reset Position controls to the options panel.
+- Persist the dragged frame position and lock state across sessions.
+- Keep `/pxp lock`, `/pxp unlock`, and `/pxp reset` synchronized with the saved options.
 
 ## 1.2.0
 
