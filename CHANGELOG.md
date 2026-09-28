@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.3.0
+
+### Appearance
+- Add Forever and Classic XP bar color presets.
+- Add a custom color picker with a persistent color swatch and hex value.
+
+### Position
+- Add Lock Position and Reset Position controls to the options panel.
+- Persist the dragged frame position and lock state across sessions.
+- Keep `/pxp lock`, `/pxp unlock`, and `/pxp reset` synchronized with the saved options.
+
 ## 1.2.0
 
 ### WoW Forever

@@ -12,7 +12,8 @@ Designed to feel like a natural extension of Blizzard's UI, it's lightweight, un
 - Automatically hides the XP bar when your pet can't gain XP
 - Automatically hides pet level at max level
 - Options to show, hide, or always display either element
-- Moveable and lockable
+- Forever and Classic XP bar color presets plus a custom color picker
+- Moveable and lockable with persistent positioning
 - Native Blizzard-style appearance
 - Supports WoW Forever, Classic Anniversary (TBC), and Classic Era (Hardcore, SoD). Not tested with Classic (MoP).
 

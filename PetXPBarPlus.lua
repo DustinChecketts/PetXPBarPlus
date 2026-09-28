@@ -63,6 +63,9 @@ f:SetScript("OnDragStart", function(self)
 end)
 f:SetScript("OnDragStop", function(self)
     self:StopMovingOrSizing()
+    if Addon.SavePosition then
+        Addon.SavePosition()
+    end
 end)
 f:Hide()
 f.isLocked = false
@@ -99,7 +102,7 @@ local function SyncToPetFrameLayer()
     return true
 end
 
-local function AnchorToPetFrame()
+local function AnchorToPetFrame(forceDefault)
     local petFrame = GetNativePetFrame()
     if not petFrame then
         return false
@@ -107,7 +110,11 @@ local function AnchorToPetFrame()
 
     SyncToPetFrameLayer()
     f:ClearAllPoints()
-    if Compat.isForever then
+
+    local position = Addon.db and Addon.db.position
+    if not forceDefault and type(position) == "table" and position.point and position.relativePoint then
+        f:SetPoint(position.point, petFrame, position.relativePoint, position.x or 0, position.y or 0)
+    elseif Compat.isForever then
         f:SetPoint("TOPLEFT", petFrame, "BOTTOMLEFT", 0, 12)
     else
         -- Preserve the established main-branch Classic placement.
@@ -128,6 +135,48 @@ local function AnchorToPetFrame()
         f.levelBadge:SetPoint("BOTTOM", f.bar, "TOP", -16, 0)
     end
     return true
+end
+
+local function SavePosition()
+    local petFrame = GetNativePetFrame()
+    if not petFrame or not Addon.db then return end
+
+    local point, relativeTo, relativePoint, x, y = f:GetPoint(1)
+    if relativeTo ~= petFrame then return end
+
+    Addon.db.position = {
+        point = point,
+        relativePoint = relativePoint,
+        x = x,
+        y = y,
+    }
+end
+Addon.SavePosition = SavePosition
+
+function Addon.ResetPosition()
+    if Addon.db then
+        Addon.db.position = nil
+    end
+    return AnchorToPetFrame(true)
+end
+
+function Addon.SetLocked(locked)
+    f.isLocked = locked and true or false
+    f:EnableMouse(not f.isLocked)
+    if Addon.db then
+        Addon.db.locked = f.isLocked
+    end
+end
+
+function Addon.ApplyXPBarColor()
+    local db = Addon.db
+    if db and type(db.xpColor) == "table" then
+        f.bar:SetStatusBarColor(db.xpColor.r or 1, db.xpColor.g or 1, db.xpColor.b or 1)
+    elseif Compat.isForever then
+        f.bar:SetStatusBarColor(0.58, 0.24, 0.86)
+    else
+        f.bar:SetStatusBarColor(25 / 255, 125 / 255, 255 / 255)
+    end
 end
 
 local function StartLayerSync()
@@ -298,6 +347,10 @@ local function HunterPetActive()
     end
 
     AnchorToPetFrame()
+    if Addon.db then
+        Addon.SetLocked(Addon.db.locked)
+        Addon.ApplyXPBarColor()
+    end
     f:Show()
     UpdatePetXP()
     ApplyDisplayOptions()
@@ -343,18 +396,16 @@ SlashCmdList.PXP = function(msg)
     msg = strtrim((msg or ""):lower())
 
     if msg == "reset" then
-        if AnchorToPetFrame() then
+        if Addon.ResetPosition() then
             Print("reset to its default position")
         else
             Print("could not find Blizzard's PetFrame")
         end
     elseif msg == "lock" then
-        f.isLocked = true
-        f:EnableMouse(false)
+        Addon.SetLocked(true)
         Print("frame is now LOCKED")
     elseif msg == "unlock" then
-        f.isLocked = false
-        f:EnableMouse(true)
+        Addon.SetLocked(false)
         Print("is now UNLOCKED and may be dragged to reposition")
     elseif msg == "options" or msg == "config" then
         if PetXPBarPlus and PetXPBarPlus.OpenOptions then
