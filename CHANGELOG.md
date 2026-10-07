@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.3.1
+
+### Fixes
+- Fix PetXPBarPlus settings not reliably persisting between sessions on affected clients.
+- Initialize SavedVariables after the addon receives `ADDON_LOADED`, ensuring saved color, visibility, lock, and position settings are restored before they are applied.
+
+
 ## 1.3.0
 
 ### Appearance

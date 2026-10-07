@@ -92,8 +92,6 @@ local function ResetDefaults()
 end
 Addon.ResetDefaults = ResetDefaults
 
-InitializeDB()
-
 local panel = CreateFrame("Frame", "PetXPBarPlusOptionsPanel")
 panel.name = "PetXPBarPlus"
 
@@ -241,4 +239,19 @@ function Addon.OpenOptions()
     Compat.OpenOptionsPanel(panel, category)
 end
 
-Apply()
+-- SavedVariables are guaranteed to be available for this addon when
+-- ADDON_LOADED fires. Initializing earlier can replace the table before the
+-- client restores PetXPBarPlusDB, which makes settings appear to work for the
+-- current session but revert after logout/reload on affected clients.
+local loader = CreateFrame("Frame")
+loader:RegisterEvent("ADDON_LOADED")
+loader:SetScript("OnEvent", function(self, _, loadedAddon)
+    if loadedAddon ~= ADDON_NAME then
+        return
+    end
+
+    self:UnregisterEvent("ADDON_LOADED")
+    InitializeDB()
+    RefreshControls()
+    Apply()
+end)
