@@ -1,0 +1,12 @@
+name: StormCore validation
+
+on:
+  push:
+    branches:
+      - stormcore-validation-pilot
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  validate:
+    uses: DustinChecketts/StormCore/.github/workflows/validate-addon.yml@main
