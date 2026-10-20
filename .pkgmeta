@@ -8,3 +8,10 @@ ignore:
   - .github
   - .gitignore
   - ARCHITECTURE.md
+  - AGENTS.md
+  - .gitattributes
+  - standards
+  - Tests
+  - tests
+  - scripts
+  - stylua.toml

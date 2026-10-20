@@ -50,9 +50,15 @@ local function SameColor(a, b)
 end
 
 local function Apply()
-    if Addon.ApplyDisplayOptions then Addon.ApplyDisplayOptions() end
-    if Addon.ApplyXPBarColor then Addon.ApplyXPBarColor() end
-    if Addon.SetLocked then Addon.SetLocked(Addon.db.locked) end
+    if Addon.ApplyDisplayOptions then
+        Addon.ApplyDisplayOptions()
+    end
+    if Addon.ApplyXPBarColor then
+        Addon.ApplyXPBarColor()
+    end
+    if Addon.SetLocked then
+        Addon.SetLocked(Addon.db.locked)
+    end
 end
 
 local function RefreshControls()
@@ -61,9 +67,13 @@ local function RefreshControls()
     end
     local mode = Addon.db.xpColorMode
     if not mode then
-        if SameColor(Addon.db.xpColor, PURPLE) then mode = "purple"
-        elseif SameColor(Addon.db.xpColor, BLUE) then mode = "blue"
-        else mode = "custom" end
+        if SameColor(Addon.db.xpColor, PURPLE) then
+            mode = "purple"
+        elseif SameColor(Addon.db.xpColor, BLUE) then
+            mode = "blue"
+        else
+            mode = "custom"
+        end
     end
     for key, radio in pairs(colorRadios) do
         radio:SetChecked(key == mode)
@@ -75,7 +85,9 @@ end
 
 local function SetColor(color, mode)
     Addon.db.xpColor = CopyColor(color)
-    if mode then Addon.db.xpColorMode = mode end
+    if mode then
+        Addon.db.xpColorMode = mode
+    end
     RefreshControls()
     Apply()
 end
@@ -86,7 +98,9 @@ local function ResetDefaults()
     end
     Addon.db.xpColor = CopyColor(Compat.isForever and PURPLE or BLUE)
     Addon.db.xpColorMode = Compat.isForever and "purple" or "blue"
-    if Addon.ResetPosition then Addon.ResetPosition() end
+    if Addon.ResetPosition then
+        Addon.ResetPosition()
+    end
     RefreshControls()
     Apply()
 end
@@ -107,9 +121,13 @@ local function MakeCheckbox(label, key, y)
     local check = CreateFrame("CheckButton", nil, panel, "UICheckButtonTemplate")
     check:SetPoint("TOPLEFT", 16, y)
     local textRegion = check.Text or check.text
-    if textRegion then textRegion:SetText(label) end
+    if textRegion then
+        textRegion:SetText(label)
+    end
     controls[key] = check
-    check:SetScript("OnShow", function(self) self:SetChecked(Addon.db[key]) end)
+    check:SetScript("OnShow", function(self)
+        self:SetChecked(Addon.db[key])
+    end)
     check:SetScript("OnClick", function(self)
         Addon.db[key] = self:GetChecked() and true or false
         Apply()
@@ -131,7 +149,9 @@ local behaviorNote = panel:CreateFontString(nil, "ARTWORK", "GameFontHighlightSm
 behaviorNote:SetPoint("TOPLEFT", 42, -208)
 behaviorNote:SetWidth(430)
 behaviorNote:SetJustifyH("LEFT")
-behaviorNote:SetText("By default, the XP bar hides when your pet cannot gain XP, and the pet level hides at the level cap.")
+behaviorNote:SetText(
+    "By default, the XP bar hides when your pet cannot gain XP, and the pet level hides at the level cap."
+)
 
 local appearanceTitle = panel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
 appearanceTitle:SetPoint("TOPLEFT", 16, -244)
@@ -201,7 +221,9 @@ local function OpenColorPicker()
 
     if ColorPickerFrame.SetupColorPickerAndShow then
         ColorPickerFrame:SetupColorPickerAndShow({
-            r = old.r, g = old.g, b = old.b,
+            r = old.r,
+            g = old.g,
+            b = old.b,
             swatchFunc = changed,
             cancelFunc = cancelled,
             hasOpacity = false,
@@ -224,10 +246,12 @@ positionTitle:SetText("Position")
 
 MakeCheckbox("Lock Position", "locked", -392)
 MakeButton("Reset Position", 42, -424, 112, function()
-    if Addon.ResetPosition then Addon.ResetPosition() end
+    if Addon.ResetPosition then
+        Addon.ResetPosition()
+    end
 end)
 
-local defaultsButton = MakeButton("Defaults", 16, -470, 96, ResetDefaults)
+MakeButton("Defaults", 16, -470, 96, ResetDefaults)
 
 panel:SetScript("OnShow", function()
     RefreshControls()

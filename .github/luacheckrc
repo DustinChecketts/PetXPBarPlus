@@ -1,0 +1,12 @@
+-- WoW client APIs are provided at runtime, not by standalone Lua.
+-- Keep this list narrow so accidental globals remain visible.
+read_globals = {
+  "HasPetUI", "GetPetExperience", "UnitLevel", "CreateFrame", "UIParent",
+  "C_Timer", "GetBuildInfo", "strtrim", "GetEffectivePlayerMaxLevel",
+  "GetMaxPlayerLevel", "Settings", "InterfaceOptions_AddCategory",
+  "InterfaceOptionsFrame_OpenToCategory",
+}
+globals = {
+  "PetXPBarPlus", "PetXPBarPlusDB", "SLASH_PXP1", "SlashCmdList",
+  "ColorPickerFrame",
+}

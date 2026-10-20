@@ -1,4 +1,3 @@
-local ADDON_NAME = ...
 PetXPBarPlus = PetXPBarPlus or {}
 local Addon = PetXPBarPlus
 
