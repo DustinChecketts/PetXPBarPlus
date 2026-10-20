@@ -1,4 +1,3 @@
-local ADDON_NAME = ...
 PetXPBarPlus = PetXPBarPlus or {}
 local Addon = PetXPBarPlus
 local PREFIX = "|cff1980ffPetXPBarPlus|r"
@@ -376,7 +375,7 @@ local function HunterPetActive()
 end
 
 local function PrintDiagnostics()
-    local version, build, buildDate, interfaceVersion = GetBuildInfo()
+    local version, build, _, interfaceVersion = GetBuildInfo()
     local hasUI, isHunterPet = GetHunterPetState()
     local currentXP, nextXP = GetPetXP()
 
