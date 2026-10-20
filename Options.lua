@@ -50,9 +50,15 @@ local function SameColor(a, b)
 end
 
 local function Apply()
-    if Addon.ApplyDisplayOptions then Addon.ApplyDisplayOptions() end
-    if Addon.ApplyXPBarColor then Addon.ApplyXPBarColor() end
-    if Addon.SetLocked then Addon.SetLocked(Addon.db.locked) end
+    if Addon.ApplyDisplayOptions then
+        Addon.ApplyDisplayOptions()
+    end
+    if Addon.ApplyXPBarColor then
+        Addon.ApplyXPBarColor()
+    end
+    if Addon.SetLocked then
+        Addon.SetLocked(Addon.db.locked)
+    end
 end
 
 local function RefreshControls()
@@ -61,9 +67,13 @@ local function RefreshControls()
     end
     local mode = Addon.db.xpColorMode
     if not mode then
-        if SameColor(Addon.db.xpColor, PURPLE) then mode = "purple"
-        elseif SameColor(Addon.db.xpColor, BLUE) then mode = "blue"
-        else mode = "custom" end
+        if SameColor(Addon.db.xpColor, PURPLE) then
+            mode = "purple"
+        elseif SameColor(Addon.db.xpColor, BLUE) then
+            mode = "blue"
+        else
+            mode = "custom"
+        end
     end
     for key, radio in pairs(colorRadios) do
         radio:SetChecked(key == mode)
@@ -201,7 +211,9 @@ local function OpenColorPicker()
 
     if ColorPickerFrame.SetupColorPickerAndShow then
         ColorPickerFrame:SetupColorPickerAndShow({
-            r = old.r, g = old.g, b = old.b,
+            r = old.r,
+            g = old.g,
+            b = old.b,
             swatchFunc = changed,
             cancelFunc = cancelled,
             hasOpacity = false,
@@ -224,7 +236,9 @@ positionTitle:SetText("Position")
 
 MakeCheckbox("Lock Position", "locked", -392)
 MakeButton("Reset Position", 42, -424, 112, function()
-    if Addon.ResetPosition then Addon.ResetPosition() end
+    if Addon.ResetPosition then
+        Addon.ResetPosition()
+    end
 end)
 
 MakeButton("Defaults", 16, -470, 96, ResetDefaults)
