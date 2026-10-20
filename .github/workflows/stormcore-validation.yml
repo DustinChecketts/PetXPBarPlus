@@ -7,6 +7,9 @@ on:
   pull_request:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   validate:
     uses: DustinChecketts/StormCore/.github/workflows/validate-addon.yml@80696280b69b2c4d71c56b40f0950dc60fb4d27b
