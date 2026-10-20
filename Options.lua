@@ -227,7 +227,7 @@ MakeButton("Reset Position", 42, -424, 112, function()
     if Addon.ResetPosition then Addon.ResetPosition() end
 end)
 
-local defaultsButton = MakeButton("Defaults", 16, -470, 96, ResetDefaults)
+MakeButton("Defaults", 16, -470, 96, ResetDefaults)
 
 panel:SetScript("OnShow", function()
     RefreshControls()
