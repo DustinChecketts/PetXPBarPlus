@@ -85,7 +85,9 @@ end
 
 local function SetColor(color, mode)
     Addon.db.xpColor = CopyColor(color)
-    if mode then Addon.db.xpColorMode = mode end
+    if mode then
+        Addon.db.xpColorMode = mode
+    end
     RefreshControls()
     Apply()
 end
@@ -96,7 +98,9 @@ local function ResetDefaults()
     end
     Addon.db.xpColor = CopyColor(Compat.isForever and PURPLE or BLUE)
     Addon.db.xpColorMode = Compat.isForever and "purple" or "blue"
-    if Addon.ResetPosition then Addon.ResetPosition() end
+    if Addon.ResetPosition then
+        Addon.ResetPosition()
+    end
     RefreshControls()
     Apply()
 end
@@ -117,9 +121,13 @@ local function MakeCheckbox(label, key, y)
     local check = CreateFrame("CheckButton", nil, panel, "UICheckButtonTemplate")
     check:SetPoint("TOPLEFT", 16, y)
     local textRegion = check.Text or check.text
-    if textRegion then textRegion:SetText(label) end
+    if textRegion then
+        textRegion:SetText(label)
+    end
     controls[key] = check
-    check:SetScript("OnShow", function(self) self:SetChecked(Addon.db[key]) end)
+    check:SetScript("OnShow", function(self)
+        self:SetChecked(Addon.db[key])
+    end)
     check:SetScript("OnClick", function(self)
         Addon.db[key] = self:GetChecked() and true or false
         Apply()
@@ -141,7 +149,9 @@ local behaviorNote = panel:CreateFontString(nil, "ARTWORK", "GameFontHighlightSm
 behaviorNote:SetPoint("TOPLEFT", 42, -208)
 behaviorNote:SetWidth(430)
 behaviorNote:SetJustifyH("LEFT")
-behaviorNote:SetText("By default, the XP bar hides when your pet cannot gain XP, and the pet level hides at the level cap.")
+behaviorNote:SetText(
+    "By default, the XP bar hides when your pet cannot gain XP, and the pet level hides at the level cap."
+)
 
 local appearanceTitle = panel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
 appearanceTitle:SetPoint("TOPLEFT", 16, -244)
