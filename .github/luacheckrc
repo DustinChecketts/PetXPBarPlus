@@ -4,8 +4,9 @@ read_globals = {
   "HasPetUI", "GetPetExperience", "UnitLevel", "CreateFrame", "UIParent",
   "C_Timer", "GetBuildInfo", "strtrim", "GetEffectivePlayerMaxLevel",
   "GetMaxPlayerLevel", "Settings", "InterfaceOptions_AddCategory",
-  "InterfaceOptionsFrame_OpenToCategory", "ColorPickerFrame",
+  "InterfaceOptionsFrame_OpenToCategory",
 }
 globals = {
   "PetXPBarPlus", "PetXPBarPlusDB", "SLASH_PXP1", "SlashCmdList",
+  "ColorPickerFrame",
 }
