@@ -138,10 +138,14 @@ end
 
 local function SavePosition()
     local petFrame = GetNativePetFrame()
-    if not petFrame or not Addon.db then return end
+    if not petFrame or not Addon.db then
+        return
+    end
 
     local point, relativeTo, relativePoint, x, y = f:GetPoint(1)
-    if relativeTo ~= petFrame then return end
+    if relativeTo ~= petFrame then
+        return
+    end
 
     Addon.db.position = {
         point = point,
@@ -221,7 +225,6 @@ else
     f.bar.border:SetAllPoints(f.bar)
 end
 
-
 -- Pet level display. Forever receives the compact medallion treatment;
 -- Classic Era/Anniversary retain the original text presentation.
 f.levelBadge = CreateFrame("Frame", "PetXPBarPlusLevelBadge", f)
@@ -290,7 +293,9 @@ end
 
 local function ApplyDisplayOptions()
     local db = Addon.db
-    if not db then return end
+    if not db then
+        return
+    end
 
     local playerLevel = GetUnitLevel("player")
     local petLevel = GetUnitLevel("pet")
@@ -432,7 +437,12 @@ eventFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
 eventFrame:RegisterEvent("UNIT_PET_EXPERIENCE")
 
 eventFrame:SetScript("OnEvent", function(_, event, unit)
-    if event == "UNIT_PET" or event == "PLAYER_LOGIN" or event == "PLAYER_ALIVE" or event == "PLAYER_ENTERING_WORLD" then
+    if
+        event == "UNIT_PET"
+        or event == "PLAYER_LOGIN"
+        or event == "PLAYER_ALIVE"
+        or event == "PLAYER_ENTERING_WORLD"
+    then
         AnchorToPetFrame()
         HunterPetActive()
         StartLayerSync()
