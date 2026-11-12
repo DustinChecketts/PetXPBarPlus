@@ -307,7 +307,7 @@ local function UpdatePetXP()
         local percent = math.max(0, math.min(100, (currentXP / nextXP) * 100))
         f.bar:SetValue(percent)
         if Addon.db and Addon.db.showXPPercent and f.bar:IsShown() then
-            local decimals = Addon.db.xpPercentDecimals == 2 and 2 or 1
+            local decimals = Addon.db.xpPercentDecimals == 1 and 1 or 0
             f.bar.percentText:SetText(string.format("%." .. decimals .. "f%%", percent))
             f.bar.percentText:Show()
         else
