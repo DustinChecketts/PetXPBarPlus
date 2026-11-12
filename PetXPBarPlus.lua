@@ -242,6 +242,16 @@ else
     f.bar.border:SetAllPoints(f.bar)
 end
 
+-- Optional percentage text sits just above the narrow XP bar.
+f.bar.percentText = f.bar:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+f.bar.percentText:SetPoint("BOTTOM", f.bar, "TOP", 0, 2)
+f.bar.percentText:SetTextColor(1, 1, 1)
+local percentFont = f.bar.percentText:GetFont()
+if percentFont then
+    f.bar.percentText:SetFont(percentFont, 9, "OUTLINE")
+end
+f.bar.percentText:Hide()
+
 -- Pet level display. Forever receives the compact medallion treatment;
 -- Classic Era/Anniversary retain the original text presentation.
 f.levelBadge = CreateFrame("Frame", "PetXPBarPlusLevelBadge", f)
@@ -285,6 +295,7 @@ local function UpdatePetXP()
     local hasUI, isHunterPet = GetHunterPetState()
     if not (hasUI and isHunterPet) then
         f.bar:SetValue(0)
+        f.bar.percentText:Hide()
         f.levelBadge.text:SetText("")
         return
     end
@@ -293,9 +304,18 @@ local function UpdatePetXP()
     local level = GetUnitLevel("pet")
 
     if currentXP and nextXP and nextXP > 0 then
-        f.bar:SetValue((currentXP / nextXP) * 100)
+        local percent = math.max(0, math.min(100, (currentXP / nextXP) * 100))
+        f.bar:SetValue(percent)
+        if Addon.db and Addon.db.showXPPercent then
+            local decimals = Addon.db.xpPercentDecimals == 2 and 2 or 1
+            f.bar.percentText:SetText(string.format("%." .. decimals .. "f%%", percent))
+            f.bar.percentText:Show()
+        else
+            f.bar.percentText:Hide()
+        end
     else
         f.bar:SetValue(0)
+        f.bar.percentText:Hide()
     end
 
     f.levelBadge.text:SetText(level or "")
@@ -328,8 +348,14 @@ local function ApplyDisplayOptions()
 
     if db.showXPBar and xpBarEligible then
         f.bar:Show()
+        if db.showXPPercent then
+            UpdatePetXP()
+        else
+            f.bar.percentText:Hide()
+        end
     else
         f.bar:Hide()
+        f.bar.percentText:Hide()
     end
 
     if db.showPetLevel and petLevelEligible then
