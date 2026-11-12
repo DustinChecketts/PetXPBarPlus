@@ -9,6 +9,8 @@ local BLUE = { r = 25 / 255, g = 125 / 255, b = 255 / 255 }
 local DEFAULTS = {
     showXPBar = true,
     showPetLevel = true,
+    showXPPercent = false,
+    xpPercentDecimals = 1,
     alwaysShowXPBar = false,
     alwaysShowPetLevel = false,
     locked = false,
@@ -37,6 +39,7 @@ end
 local controls = {}
 local colorRadios = {}
 local customLabel
+local precisionRadios = {}
 
 local function ColorToHex(color)
     local r = math.floor((color.r or 0) * 255 + 0.5)
@@ -55,6 +58,9 @@ local function Apply()
     end
     if Addon.ApplyXPBarColor then
         Addon.ApplyXPBarColor()
+    end
+    if Addon.UpdatePetXP then
+        Addon.UpdatePetXP()
     end
     if Addon.SetLocked then
         Addon.SetLocked(Addon.db.locked)
@@ -77,6 +83,9 @@ local function RefreshControls()
     end
     for key, radio in pairs(colorRadios) do
         radio:SetChecked(key == mode)
+    end
+    for decimals, radio in pairs(precisionRadios) do
+        radio:SetChecked((Addon.db.xpPercentDecimals == 2 and 2 or 1) == decimals)
     end
     if customLabel then
         customLabel:SetText(mode == "custom" and ("Custom (" .. ColorToHex(Addon.db.xpColor) .. ")") or "Custom (Pick)")
@@ -250,6 +259,31 @@ MakeButton("Reset Position", 42, -424, 112, function()
         Addon.ResetPosition()
     end
 end)
+
+local percentTitle = panel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+percentTitle:SetPoint("TOPLEFT", 240, -244)
+percentTitle:SetText("XP Percentage")
+
+local percentCheck = MakeCheckbox("Show XP Percentage", "showXPPercent", -268)
+percentCheck:ClearAllPoints()
+percentCheck:SetPoint("TOPLEFT", 240, -268)
+
+local function MakePrecisionRadio(decimals, label, y)
+    local radio = CreateFrame("CheckButton", nil, panel, "UIRadioButtonTemplate")
+    radio:SetPoint("TOPLEFT", 260, y)
+    local text = panel:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+    text:SetPoint("LEFT", radio, "RIGHT", 6, 0)
+    text:SetText(label)
+    precisionRadios[decimals] = radio
+    radio:SetScript("OnClick", function()
+        Addon.db.xpPercentDecimals = decimals
+        RefreshControls()
+        Apply()
+    end)
+end
+
+MakePrecisionRadio(1, "1 decimal (67.4%)", -300)
+MakePrecisionRadio(2, "2 decimals (67.42%)", -330)
 
 MakeButton("Defaults", 16, -470, 96, ResetDefaults)
 
