@@ -306,7 +306,7 @@ local function UpdatePetXP()
     if currentXP and nextXP and nextXP > 0 then
         local percent = math.max(0, math.min(100, (currentXP / nextXP) * 100))
         f.bar:SetValue(percent)
-        if Addon.db and Addon.db.showXPPercent then
+        if Addon.db and Addon.db.showXPPercent and f.bar:IsShown() then
             local decimals = Addon.db.xpPercentDecimals == 2 and 2 or 1
             f.bar.percentText:SetText(string.format("%." .. decimals .. "f%%", percent))
             f.bar.percentText:Show()
@@ -320,6 +320,8 @@ local function UpdatePetXP()
 
     f.levelBadge.text:SetText(level or "")
 end
+
+Addon.UpdatePetXP = UpdatePetXP
 
 local function StopXPTicker()
     if xpTicker then
