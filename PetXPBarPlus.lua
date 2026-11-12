@@ -57,6 +57,7 @@ f:EnableMouse(true)
 f:RegisterForDrag("LeftButton")
 f:SetScript("OnDragStart", function(self)
     if not self.isLocked then
+        self.isDragging = true
         self:StartMoving()
     end
 end)
@@ -65,6 +66,7 @@ f:SetScript("OnDragStop", function(self)
     if Addon.SavePosition then
         Addon.SavePosition()
     end
+    self.isDragging = false
 end)
 f:Hide()
 f.isLocked = false
@@ -107,6 +109,10 @@ local function AnchorToPetFrame(forceDefault)
         return false
     end
 
+    if f.isDragging then
+        return true
+    end
+
     SyncToPetFrameLayer()
     f:ClearAllPoints()
 
@@ -142,17 +148,28 @@ local function SavePosition()
         return
     end
 
-    local point, relativeTo, relativePoint, x, y = f:GetPoint(1)
-    if relativeTo ~= petFrame then
+    -- StartMoving() may reanchor the bar to UIParent. Convert its actual
+    -- screen coordinates back into PetFrame-local offsets before persisting.
+    local barLeft, barTop = f:GetLeft(), f:GetTop()
+    local petLeft, petTop = petFrame:GetLeft(), petFrame:GetTop()
+    local barScale, petScale = f:GetEffectiveScale(), petFrame:GetEffectiveScale()
+    if not (barLeft and barTop and petLeft and petTop and barScale and petScale and petScale > 0) then
         return
     end
 
+    local x = (barLeft * barScale - petLeft * petScale) / petScale
+    local y = (barTop * barScale - petTop * petScale) / petScale
     Addon.db.position = {
-        point = point,
-        relativePoint = relativePoint,
+        point = "TOPLEFT",
+        relativePoint = "TOPLEFT",
         x = x,
         y = y,
     }
+
+    -- Normalize the live anchor as well, so subsequent refreshes cannot
+    -- snap the frame back to its pre-drag location.
+    f:ClearAllPoints()
+    f:SetPoint("TOPLEFT", petFrame, "TOPLEFT", x, y)
 end
 Addon.SavePosition = SavePosition
 
