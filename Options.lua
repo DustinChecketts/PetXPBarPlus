@@ -10,7 +10,7 @@ local DEFAULTS = {
     showXPBar = true,
     showPetLevel = true,
     showXPPercent = false,
-    xpPercentDecimals = 1,
+    xpPercentDecimals = 0,
     alwaysShowXPBar = false,
     alwaysShowPetLevel = false,
     locked = false,
@@ -85,7 +85,7 @@ local function RefreshControls()
         radio:SetChecked(key == mode)
     end
     for decimals, radio in pairs(precisionRadios) do
-        radio:SetChecked((Addon.db.xpPercentDecimals == 2 and 2 or 1) == decimals)
+        radio:SetChecked((Addon.db.xpPercentDecimals == 1 and 1 or 0) == decimals)
     end
     if customLabel then
         customLabel:SetText(mode == "custom" and ("Custom (" .. ColorToHex(Addon.db.xpColor) .. ")") or "Custom (Pick)")
@@ -282,8 +282,8 @@ local function MakePrecisionRadio(decimals, label, y)
     end)
 end
 
-MakePrecisionRadio(1, "1 decimal (67.4%)", -300)
-MakePrecisionRadio(2, "2 decimals (67.42%)", -330)
+MakePrecisionRadio(0, "Whole percent (67%)", -300)
+MakePrecisionRadio(1, "1 decimal (67.4%)", -330)
 
 MakeButton("Defaults", 16, -470, 96, ResetDefaults)
 
